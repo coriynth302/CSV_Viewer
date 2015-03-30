@@ -32,13 +32,13 @@ class Seitenverwalter {
     return $aktuelle_tabelle;
   }
 
-  public function tabelle_darstellung_body($array) {
+  public function csv_array_bilden($array) {
 
     $csv_array['kopf'] = explode(";", $array['kopf']);
-    
+
     foreach ($array['zeilen'] as $value) {
 
-    $csv_array['tabellenzeilen'] = explode(";", $value);
+      $csv_array['tabellenzeilen'] = explode(";", $value);
       if ($value != FALSE) {
         for ($index1 = 0; $index1 < count($csv_array['tabellenzeilen']); $index1++) {
           $string_array["Stelle_$index1"][] = strlen($csv_array['tabellenzeilen'][$index1]);
@@ -49,6 +49,32 @@ class Seitenverwalter {
       $csv_array['strings_laenge'][] = max($string_array["Stelle_$index"]);
     }
     return $csv_array;
+  }
+
+  public function header_bauen($csv_array) {
+
+    for ($index = 0; $index < count($csv_array['kopf']); $index++) {
+      if ($index == count($csv_array['kopf']) - 1) {
+        echo $csv_array['kopf'][$index];
+        break;
+      }
+      echo str_pad($csv_array['kopf'][$index], $csv_array['strings_laenge'][$index], " ") . "|";
+    }
+  }
+  
+  public function tabelle_bauen($csv_array, $array) {
+    
+        foreach ($array['zeilen'] as $value) {
+      $string_array = explode(";", $value);
+      for ($index1 = 0; $index1 < count($string_array); $index1++) {
+        if ($index1 == count($string_array) - 1) {
+          echo $string_array[$index1];
+          break;
+        }
+        echo str_pad($string_array[$index1], $csv_array['strings_laenge'][$index1], " ") . " | ";
+      }
+    }
+    
   }
 
 }
