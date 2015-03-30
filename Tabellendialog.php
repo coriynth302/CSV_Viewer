@@ -28,9 +28,32 @@ class Ausgabe {
   public function tabelle_anzeigen($array) {
 
     $csv_array = Seitenverwalter::csv_array_bilden($array);
-    Seitenverwalter::header_bauen($csv_array);
-    Seitenverwalter::tabelle_bauen($csv_array, $array);
+    self::header_bauen($csv_array);
+    self::tabelle_bauen($csv_array, $array);
+  }
 
+  public function header_bauen($csv_array) {
+
+    for ($index = 0; $index < count($csv_array['kopf']); $index++) {
+      if ($index == count($csv_array['kopf']) - 1) {
+        echo $csv_array['kopf'][$index];
+        break;
+      }
+      echo str_pad($csv_array['kopf'][$index], $csv_array['strings_laenge'][$index], " ") . "|";
+    }
+  }
+
+  public function tabelle_bauen($csv_array) {
+
+    foreach ($csv_array['tabellenzeilen'] as $value) {
+      for ($index1 = 0; $index1 < count($value); $index1++) {
+        if ($index1 == count($value) - 1) {
+          echo $value[$index1];
+          break;
+        }
+        echo str_pad($value[$index1], $csv_array['strings_laenge'][$index1], " ") . " | ";
+      }
+    }
   }
 
   public function menue_anzeigen() {
