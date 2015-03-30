@@ -31,38 +31,39 @@ class Ausgabe {
 
     $kopf_array = explode(";", $array['kopf']);
 
-    echo str_pad($kopf_array[0], $strings_laenge[0], " ") . "|";
-    echo str_pad($kopf_array[1], $strings_laenge[1], " ") . "|";
-    echo str_pad($kopf_array[2], $strings_laenge[2], " ") . "|";
-    echo $kopf_array[3];
+    for ($index = 0; $index < count($kopf_array); $index++) {
+      if ($index == count($kopf_array) - 1) {
+        echo $kopf_array[$index];
+        break;
+      }
+      echo str_pad($kopf_array[$index], $strings_laenge[$index], " ") . "|";
+    }
 
     foreach ($array['zeilen'] as $value) {
-
-      if ($value != FALSE){
       $string_array = explode(";", $value);
-      echo str_pad($string_array[0], $strings_laenge[0], " ") . " | ";
-      echo str_pad($string_array[1], $strings_laenge[1], " ") . " | ";
-      echo str_pad($string_array[2], $strings_laenge[2], " ") . " | ";
-      echo $string_array[3];
+      for ($index1 = 0; $index1 < count($string_array); $index1++) {
+        if ($index1 == count($string_array) - 1) {
+          echo $string_array[$index1];
+          break;
+        }
+        echo str_pad($string_array[$index1], $strings_laenge[$index1], " ") . " | ";
       }
     }
   }
 
   public function tabelle_darstellung_body($array) {
-
+    
     foreach ($array['zeilen'] as $value) {
 
-      if ($value != FALSE){
-      $string_array = explode(";", $value);
-      $strings_1[] = strlen($string_array[0]);
-      $strings_2[] = strlen($string_array[1]);
-      $strings_3[] = strlen($string_array[2]);
-       }
+      if ($value != FALSE) {
+        $string_array = explode(";", $value);
+        for ($index1 = 0; $index1 < count($string_array); $index1++) {
+          $csv_array["Stelle_$index1"][] = strlen($string_array[$index1]);
+        }
+      }
     }
-    $csv_array = array($strings_1, $strings_2, $strings_3);
-
     for ($index = 0; $index < count($csv_array); $index++) {
-      $meine_strings[] = max($csv_array[$index]);
+      $meine_strings[] = max($csv_array["Stelle_$index"]);
     }
     return $meine_strings;
   }
