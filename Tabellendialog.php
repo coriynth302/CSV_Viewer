@@ -27,16 +27,16 @@ class Ausgabe {
 
   public function tabelle_anzeigen($array) {
 
-    $strings_laenge = self::tabelle_darstellung_body($array);
+    $csv_array = Seitenverwalter::tabelle_darstellung_body($array);
 
-    $kopf_array = explode(";", $array['kopf']);
-
-    for ($index = 0; $index < count($kopf_array); $index++) {
-      if ($index == count($kopf_array) - 1) {
-        echo $kopf_array[$index];
+    var_dump($csv_array);
+    
+    for ($index = 0; $index < count($csv_array['kopf']); $index++) {
+      if ($index == count($csv_array['kopf']) - 1) {
+        echo $csv_array['kopf'][$index];
         break;
       }
-      echo str_pad($kopf_array[$index], $strings_laenge[$index], " ") . "|";
+      echo str_pad($csv_array['kopf'][$index], $csv_array['strings_laenge'][$index], " ") . "|";
     }
 
     foreach ($array['zeilen'] as $value) {
@@ -46,26 +46,9 @@ class Ausgabe {
           echo $string_array[$index1];
           break;
         }
-        echo str_pad($string_array[$index1], $strings_laenge[$index1], " ") . " | ";
+        echo str_pad($string_array[$index1], $csv_array['strings_laenge'][$index1], " ") . " | ";
       }
     }
-  }
-
-  public function tabelle_darstellung_body($array) {
-    
-    foreach ($array['zeilen'] as $value) {
-
-      if ($value != FALSE) {
-        $string_array = explode(";", $value);
-        for ($index1 = 0; $index1 < count($string_array); $index1++) {
-          $csv_array["Stelle_$index1"][] = strlen($string_array[$index1]);
-        }
-      }
-    }
-    for ($index = 0; $index < count($csv_array); $index++) {
-      $meine_strings[] = max($csv_array["Stelle_$index"]);
-    }
-    return $meine_strings;
   }
 
   public function menue_anzeigen() {
